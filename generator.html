@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le générateur</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      box-sizing: border-box;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 10px;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      max-width: 500px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    #phrase-generee {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      padding: 20px 0;
+    }
+
+    textarea {
+      height: 200px;
+    }
+
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const genererButton = document.getElementById('generer');
+      const phrasesTextarea = document.getElementById('phrases');
+      const urlInput = document.getElementById('url');
+
+      function base64UrlEncode(str) {
+        // Vérifie si l'entrée est une chaîne de caractères
+        if (typeof str !== 'string') {
+          throw new TypeError('L\'entrée doit être une chaîne de caractères.');
+        }
+
+        // Étape 1: Encoder la chaîne en UTF-8 (si elle contient des caractères non-ASCII)
+        // puis en Base64.
+        // La fonction btoa() encode une chaîne en Base64.
+        // Elle fonctionne avec des chaînes de caractères dont les caractères sont représentés
+        // par un seul octet. Pour gérer les caractères Unicode, nous devons d'abord
+        // encoder la chaîne en UTF-8.
+        let base64;
+        try {
+          // encodeURIComponent gère l'encodage UTF-8 des caractères spéciaux,
+          // puis unescape convertit les séquences %XX en caractères correspondants.
+          // btoa encode ensuite cette chaîne en Base64.
+          base64 = btoa(unescape(encodeURIComponent(str)));
+        } catch (e) {
+          // Gérer les erreurs potentielles avec btoa (par exemple, caractères non valides)
+          console.error("Erreur lors de l'encodage Base64 initial :", e);
+          // Tenter une approche alternative pour les navigateurs plus anciens ou des cas spécifiques
+          // Note: Cette alternative pourrait ne pas gérer tous les cas Unicode correctement
+          // dans des environnements très anciens sans TextEncoder.
+          try {
+            const utf8Bytes = new TextEncoder().encode(str);
+            base64 = btoa(String.fromCharCode(...utf8Bytes));
+          } catch (fallbackError) {
+            console.error("Erreur lors de la tentative d'encodage Base64 avec TextEncoder :", fallbackError);
+            throw new Error("Impossible d'encoder la chaîne en Base64. L'environnement ne supporte peut-être pas btoa avec des caractères Unicode complexes ou TextEncoder n'est pas disponible.");
+          }
+        }
+
+
+        // Étape 2: Remplacer les caractères '+' par '-'
+        let base64Url = base64.replace(/\+/g, '-');
+
+        // Étape 3: Remplacer les caractères '/' par '_'
+        base64Url = base64Url.replace(/\//g, '_');
+
+        // Étape 4: Supprimer les caractères de remplissage '='
+        base64Url = base64Url.replace(/=+$/, '');
+
+        return base64Url;
+      }
+
+      async function genererURL() {
+        const list = (phrasesTextarea.value || "").split('\n').map(d => d.trim());
+        const encoded = base64UrlEncode(list.join('%%%'));
+        console.log(encoded, list)
+        urlInput.value = 'https://6tech.net/piposslin/list.html?s=' + encoded;
+        // phraseGenereeElement.textContent = list[indexAleatoire] + ".";
+      }
+
+      genererButton.addEventListener('click', genererURL);
+    });
+
+  </script>
+</head>
+<body>
+<div class="container">
+  <h1>Le générateur de pipotron</h1>
+  <label>
+    Liste des phrases ( une par ligne )
+    <textarea id="phrases"></textarea>
+  </label>
+  <button id="generer">générer mon URL</button>
+  <label>
+    URL
+    <input type="text" readonly id="url"/>
+  </label>
+</div>
+</body>
+</html>

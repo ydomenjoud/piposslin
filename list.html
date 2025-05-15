@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Piposslin</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #phrase-generee {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const phraseGenereeElement = document.getElementById('phrase-generee');
+            const genererButton = document.getElementById('generer');
+
+            const listParam = new URLSearchParams(window.location.search).get('s');
+            function base64UrlDecode(base64UrlStr) {
+                // Vérifie si l'entrée est une chaîne de caractères
+                if (typeof base64UrlStr !== 'string') {
+                    throw new TypeError('L\'entrée doit être une chaîne de caractères.');
+                }
+
+                // Étape 1: Remplacer les caractères '-' par '+'
+                let base64 = base64UrlStr.replace(/-/g, '+');
+
+                // Étape 2: Remplacer les caractères '_' par '/'
+                base64 = base64.replace(/_/g, '/');
+
+                // Étape 3: Ajouter le remplissage '=' si nécessaire
+                // La longueur d'une chaîne Base64 (avant suppression du padding) doit être un multiple de 4.
+                while (base64.length % 4) {
+                    base64 += '=';
+                }
+
+                // Étape 4: Décoder la chaîne Base64 puis décoder l'UTF-8.
+                // La fonction atob() décode une chaîne Base64.
+                // Pour gérer les caractères Unicode correctement, nous devons ensuite
+                // décoder la chaîne résultante de l'UTF-8.
+                let decodedStr;
+                try {
+                    // atob décode la chaîne Base64.
+                    // decodeURIComponent(escape(...)) gère le décodage UTF-8.
+                    decodedStr = decodeURIComponent(escape(atob(base64)));
+                } catch (e) {
+                    console.error("Erreur lors du décodage Base64 :", e);
+                    // Tenter une approche alternative pour les navigateurs plus anciens ou des cas spécifiques
+                    try {
+                        const binaryString = atob(base64);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        decodedStr = new TextDecoder().decode(bytes);
+                    } catch (fallbackError) {
+                        console.error("Erreur lors de la tentative de décodage Base64 avec TextDecoder :", fallbackError);
+                        throw new Error("Impossible de décoder la chaîne Base64. L'environnement ne supporte peut-être pas atob ou TextDecoder n'est pas disponible.");
+                    }
+                }
+                return decodedStr;
+            }
+            function genererPhrase() {
+                if(list.length === 0) {
+                    return;
+                }
+                const indexAleatoire = Math.floor(Math.random() * list.length);
+                phraseGenereeElement.textContent = list[indexAleatoire] + ".";
+            }
+            console.log({p: listParam, d: base64UrlDecode(listParam)})
+            const list = base64UrlDecode(listParam).split('%%%');
+
+            genererPhrase();
+            genererButton.addEventListener('click', genererPhrase);
+        });
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Le piposslin 1.1</h1>
+    <p id="phrase-generee">Cliquez pour générer une phrase !</p>
+    <button id="generer">Générer !</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Piposslin</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #phrase-generee {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const phraseGenereeElement = document.getElementById('phrase-generee');
+            const genererButton = document.getElementById('generer');
+
+            const list = [
+                "Je pense que c’est pareil, je n’ai pas de point fort, je suis débutant partout",
+                "La technique ça s’apprend, le plaisir ça se prend",
+                "L’assemblée a été instructive, c’est rassurant de voir que malgré la bonne ambiance et la légèreté, les bases sont solides et sérieuses",
+                "Merci, déjà, ça fait plaisir à entendre",
+                "Côté pro, je suis responsable de projet informatique",
+                "En effet, nous sommes cousins",
+                "J’ai fait une séance le mardi, puis enchainé direct avec un stage le samedi",
+                "J’ai transpiré, j’ai découvert un sport exigeant",
+                "C’est vrai que l’on se sent comme à la maison, on sait qu’on va passer un bon moment",
+                "Lorsque l’on se sent bien, on donne aux autres une bonne version de soi",
+                "Gagnant-gagnant",
+                "Pour progresser, il faut travailler et matrîser les bases",
+                "Plus sérieusement, techniquement je me débrouille, j’ai une bonne marge de progression devant moi",
+                "D’une manière générale, c’est l’occasion de passer un moment et de se faire plaisir",
+                "Il n’y a pas de secret, pour progresser, il faut manger de la balle",
+                "La compétition en soi ne m’est pas inconnue",
+                "il y a bien sûr un enjeu personnel mais un aussi d’équipe",
+                "On a que la vie qu'on se donne",
+                "“Jeune” quarantenaire originaire de Toul,"
+            ];
+
+            function genererPhrase() {
+                const indexAleatoire = Math.floor(Math.random() * list.length);
+                phraseGenereeElement.textContent = list[indexAleatoire] + ".";
+            }
+
+            genererPhrase();
+            genererButton.addEventListener('click', genererPhrase);
+        });
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Le piposslin 1.1</h1>
+    <p id="phrase-generee">Cliquez pour générer une phrase !</p>
+    <button id="generer">Générer !</button>
+</div>
+</body>
+</html>

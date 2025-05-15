@@ -82,12 +82,15 @@
                 "je suis comme le café: SANS FILTRE",
                 "Pour les “nous” de demain",
                 "De toute façon c'est pas toi qui décides",
-                "Non"
+                "Non",
+                "Est ce que tu veux goûter ma barre de céréale ?",
+                "Je ne dis rien sinon ca va être cité ..."
             ];
+
 
             function genererPhrase() {
                 const indexAleatoire = Math.floor(Math.random() * list.length);
-                phraseGenereeElement.textContent = list[indexAleatoire] + ".";
+                phraseGenereeElement.textContent = list[indexAleatoire] + "";
             }
 
             genererPhrase();

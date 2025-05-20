@@ -68,6 +68,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const genererButton = document.getElementById('generer');
       const phrasesTextarea = document.getElementById('phrases');
+      const nameText = document.getElementById('name');
       const urlInput = document.getElementById('url');
 
       function base64UrlEncode(str) {
@@ -117,10 +118,24 @@
       }
 
       async function genererURL() {
+        const encodedName = base64UrlEncode(nameText.value.trim() || "piposslin");
+
         const list = (phrasesTextarea.value || "").split('\n').map(d => d.trim());
-        const encoded = base64UrlEncode(list.join('%%%'));
-        console.log(encoded, list)
-        urlInput.value = 'https://6tech.net/piposslin/list.html?s=' + encoded;
+        const encodedList = base64UrlEncode(list.join('%%%'));
+
+        console.log({
+          name: nameText.value,
+          encodedName,
+          list: phrasesTextarea.value,
+          encodedList,
+        })
+
+        if(location.hostname === "localhost" || location.hostname === "127.0.0.1"){
+          const port = location.port
+          urlInput.value = `http://localhost:${port}/src/list.html?n=` + encodedName + '&s=' + encodedList;
+        } else {
+          urlInput.value = 'https://6tech.net/piposslin/list.html?n=' + encodedName + '&s=' + encodedList;
+        }
         // phraseGenereeElement.textContent = list[indexAleatoire] + ".";
       }
 
@@ -133,6 +148,8 @@
 <div class="container">
   <h1>Le générateur de pipotron</h1>
   <label>
+    Nom du pipotron en un mot
+    <input type="text" id="name" placeholder="piposslin, pipofrey..."/>
     Liste des phrases ( une par ligne )
     <textarea id="phrases"></textarea>
   </label>

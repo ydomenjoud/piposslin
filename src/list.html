@@ -58,7 +58,9 @@
             const phraseGenereeElement = document.getElementById('phrase-generee');
             const genererButton = document.getElementById('generer');
 
+            const nameParam = new URLSearchParams(window.location.search).get('n');
             const listParam = new URLSearchParams(window.location.search).get('s');
+
             function base64UrlDecode(base64UrlStr) {
                 // Vérifie si l'entrée est une chaîne de caractères
                 if (typeof base64UrlStr !== 'string') {
@@ -110,7 +112,19 @@
                 const indexAleatoire = Math.floor(Math.random() * list.length);
                 phraseGenereeElement.textContent = list[indexAleatoire] + ".";
             }
-            console.log({p: listParam, d: base64UrlDecode(listParam)})
+            
+            console.log({
+                n: nameParam,
+                dn: base64UrlDecode(nameParam), // decoded name
+                p: listParam,
+                dl: base64UrlDecode(listParam) // decoded list
+            })
+
+            const nameElement = document.getElementById('name');
+            const nameValue = 'Le ' + base64UrlDecode(nameParam).toLocaleLowerCase();
+            nameElement.innerText = nameValue
+            document.title = nameValue;
+
             const list = base64UrlDecode(listParam).split('%%%');
 
             genererPhrase();
@@ -121,7 +135,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Le piposslin 1.1</h1>
+<h1 id="name"></h1>
     <p id="phrase-generee">Cliquez pour générer une phrase !</p>
     <button id="generer">Générer !</button>
 </div>

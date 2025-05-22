@@ -124,7 +124,7 @@
 
 
             function genererPhrase(pos) {
-                const p = ( pos && pos !== 'Infinity' && +pos >= 0) ? +pos : -1;
+                const p = ( Number.isInteger(+pos) && +pos >= 0) ? +pos : -1;
                 const index = p >= 0
                     // position définie
                     ? p%list.length

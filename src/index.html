@@ -124,7 +124,7 @@
 
 
             function genererPhrase(pos) {
-                const p = ( Number.isInteger(+pos) && +pos >= 0) ? +pos : -1;
+                const p = (pos && Number.isInteger(+pos) && +pos >= 0) ? +pos : -1;
                 const index = p >= 0
                     // position définie
                     ? p%list.length
@@ -137,14 +137,14 @@
 
 
             genererPhrase(pos);
-            genererButton.addEventListener('click', () => genererPhrase(null));
+            genererButton.addEventListener('click', () => genererPhrase());
         });
 
     </script>
 </head>
 <body>
 <div class="container">
-    <h1>Le piposslin 1.2</h1>
+    <h1>Le piposslin 1.2.1</h1>
     <p id="phrase-generee">Cliquez pour générer une phrase !</p>
     <button id="generer">Générer !</button>
 </div>

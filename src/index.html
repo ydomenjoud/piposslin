@@ -37,6 +37,13 @@
             color: #555;
         }
 
+        #phrase-generee a {
+            color: grey;
+            font-size: 0.8em;
+            text-decoration: none;
+            display: block;
+            text-align: right;
+        }
         button {
             background-color: #007bff;
             color: white;
@@ -57,6 +64,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const phraseGenereeElement = document.getElementById('phrase-generee');
             const genererButton = document.getElementById('generer');
+            const pos = new URLSearchParams(window.location.search).get('p');
 
             const list = [
                 "Je pense que c’est pareil, je n’ai pas de point fort, je suis débutant partout",
@@ -111,23 +119,32 @@
                 "La proposition future elle est pas mal, mais à mon avis il faudra repenser la chose au moment voulu.",
                 "J'parle pô aux gens que j'connais pô !",
                 "Vazy ouesch tu prends d'la place !",
+                "Au risque de me faire citer, je viens d'y mettre le doigt et c'était délicieux."
             ];
 
 
-            function genererPhrase() {
-                const indexAleatoire = Math.floor(Math.random() * list.length);
-                phraseGenereeElement.textContent = list[indexAleatoire] + "";
+            function genererPhrase(pos) {
+                const p = ( pos && +pos >= 0) ? +pos : -1;
+                const index = p >= 0
+                    // position définie
+                    ? p%list.length
+                    // position aléatoire
+                    : Math.floor(Math.random() * list.length);
+                const url = new URL(window.location);
+                url.searchParams.set("p", index+"");
+                phraseGenereeElement.innerHTML = list[index] + ` <a href="${url}"> #${index}</a>`;
             }
 
-            genererPhrase();
-            genererButton.addEventListener('click', genererPhrase);
+
+            genererPhrase(pos);
+            genererButton.addEventListener('click', () => genererPhrase(null));
         });
 
     </script>
 </head>
 <body>
 <div class="container">
-    <h1>Le piposslin 1.1</h1>
+    <h1>Le piposslin 1.2</h1>
     <p id="phrase-generee">Cliquez pour générer une phrase !</p>
     <button id="generer">Générer !</button>
 </div>
